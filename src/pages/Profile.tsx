@@ -2,30 +2,28 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Trophy, Target } from "lucide-react";
+import { getUserPredictions } from "@/lib/dummyPredictions";
 
 export default function Profile() {
   const { user, loading: authLoading } = useAuth();
-  const [profile, setProfile] = useState<any>(null);
   const [stats, setStats] = useState({ total: 0, points: 0, exact: 0 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) return;
-    (async () => {
-      const [{ data: p }, { data: preds }] = await Promise.all([
-        supabase.from("profiles").select("*").eq("id", user.id).maybeSingle(),
-        supabase.from("predictions").select("*").eq("user_id", user.id),
-      ]);
-      setProfile(p);
-      const total = preds?.length ?? 0;
-      const points = preds?.reduce((s, x) => s + (x.points_earned ?? 0), 0) ?? 0;
-      const exact = preds?.filter((x) => x.points_earned === 3).length ?? 0;
+    const compute = () => {
+      const preds = getUserPredictions(user.id);
+      const total = preds.length;
+      const points = preds.reduce((s, x) => s + (x.points_earned ?? 0), 0);
+      const exact = preds.filter((x) => x.points_earned === 3).length;
       setStats({ total, points, exact });
       setLoading(false);
-    })();
+    };
+    compute();
+    window.addEventListener("dummy-predictions-change", compute);
+    return () => window.removeEventListener("dummy-predictions-change", compute);
   }, [user]);
 
   if (authLoading) return null;
@@ -41,9 +39,9 @@ export default function Profile() {
           <>
             <div className="rounded-lg border border-border bg-gradient-card p-8 text-center shadow-card">
               <div className="h-20 w-20 rounded-full bg-gradient-gold mx-auto mb-4 flex items-center justify-center text-3xl font-bold text-background">
-                {profile?.display_name?.[0]?.toUpperCase() ?? "?"}
+                {user.display_name?.[0]?.toUpperCase() ?? "?"}
               </div>
-              <h1 className="text-2xl font-bold">{profile?.display_name}</h1>
+              <h1 className="text-2xl font-bold">{user.display_name}</h1>
               <p className="text-sm text-muted-foreground">{user.email}</p>
             </div>
 

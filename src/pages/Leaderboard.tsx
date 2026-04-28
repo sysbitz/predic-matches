@@ -1,42 +1,37 @@
 import { useEffect, useState } from "react";
 import { Header } from "@/components/Header";
-import { supabase } from "@/integrations/supabase/client";
 import { Trophy, Medal, Award } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { getAllPredictions } from "@/lib/dummyPredictions";
 
 interface Row {
   id: string;
   display_name: string;
   total_points: number;
-  avatar_url: string | null;
+}
+
+function computeRows(): Row[] {
+  const preds = getAllPredictions();
+  const map = new Map<string, Row>();
+  for (const p of preds) {
+    const name = p.user_id.replace(/^dummy-/, "").slice(0, 12);
+    const existing = map.get(p.user_id) ?? { id: p.user_id, display_name: name, total_points: 0 };
+    existing.total_points += p.points_earned ?? 0;
+    map.set(p.user_id, existing);
+  }
+  return [...map.values()].sort((a, b) => b.total_points - a.total_points);
 }
 
 export default function Leaderboard() {
-  const [rows, setRows] = useState<Row[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [rows, setRows] = useState<Row[]>(() => computeRows());
 
   useEffect(() => {
-    let active = true;
-    const load = async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("id, display_name, total_points, avatar_url")
-        .order("total_points", { ascending: false })
-        .limit(100);
-      if (active) {
-        setRows(data ?? []);
-        setLoading(false);
-      }
+    const update = () => setRows(computeRows());
+    window.addEventListener("dummy-predictions-change", update);
+    window.addEventListener("storage", update);
+    return () => {
+      window.removeEventListener("dummy-predictions-change", update);
+      window.removeEventListener("storage", update);
     };
-    load();
-
-    const channel = supabase
-      .channel("leaderboard")
-      .on("postgres_changes", { event: "*", schema: "public", table: "profiles" }, load)
-      .on("postgres_changes", { event: "*", schema: "public", table: "predictions" }, load)
-      .subscribe();
-
-    return () => { active = false; supabase.removeChannel(channel); };
   }, []);
 
   return (
@@ -49,11 +44,7 @@ export default function Leaderboard() {
           <p className="text-muted-foreground mt-2">Updated in real time.</p>
         </div>
 
-        {loading ? (
-          <div className="space-y-2 max-w-2xl mx-auto">
-            {Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className="h-16 rounded-lg" />)}
-          </div>
-        ) : rows.length === 0 ? (
+        {rows.length === 0 ? (
           <div className="text-center text-muted-foreground py-16">No predictions yet — be the first!</div>
         ) : (
           <ol className="space-y-2 max-w-2xl mx-auto">
