@@ -1,60 +1,76 @@
-import type { Match } from "@/lib/teams";
+import { QUESTIONS, POINTS_PER_CORRECT } from "./questions";
 
-const KEY = "dummy_predictions";
+const PRED_KEY = "dummy_predictions_v2";
+const ANS_KEY = "dummy_correct_answers";
 
+// answers: { [questionId]: selectedOption }
 export type DummyPrediction = {
   user_id: string;
+  user_email: string;
+  user_name: string;
   match_id: number;
-  predicted_home_score: number;
-  predicted_away_score: number;
-  predicted_winner: string;
-  points_earned: number;
+  answers: Record<string, string>;
   created_at: string;
 };
 
-function readAll(): DummyPrediction[] {
-  try {
-    return JSON.parse(localStorage.getItem(KEY) || "[]");
-  } catch {
-    return [];
-  }
-}
+// Per-match correct answers set by admin: { [matchId]: { [questionId]: option } }
+export type CorrectAnswers = Record<string, Record<string, string>>;
 
-function writeAll(list: DummyPrediction[]) {
-  localStorage.setItem(KEY, JSON.stringify(list));
+function readPreds(): DummyPrediction[] {
+  try { return JSON.parse(localStorage.getItem(PRED_KEY) || "[]"); } catch { return []; }
+}
+function writePreds(list: DummyPrediction[]) {
+  localStorage.setItem(PRED_KEY, JSON.stringify(list));
   window.dispatchEvent(new Event("dummy-predictions-change"));
 }
 
 export function getPrediction(userId: string, matchId: number): DummyPrediction | null {
-  return readAll().find((p) => p.user_id === userId && p.match_id === matchId) ?? null;
+  return readPreds().find((p) => p.user_id === userId && p.match_id === matchId) ?? null;
 }
-
 export function getUserPredictions(userId: string): DummyPrediction[] {
-  return readAll().filter((p) => p.user_id === userId);
+  return readPreds().filter((p) => p.user_id === userId);
 }
-
 export function getAllPredictions(): DummyPrediction[] {
-  return readAll();
+  return readPreds();
 }
-
 export function savePrediction(p: DummyPrediction) {
-  const list = readAll().filter(
+  const list = readPreds().filter(
     (x) => !(x.user_id === p.user_id && x.match_id === p.match_id)
   );
   list.push(p);
-  writeAll(list);
+  writePreds(list);
 }
 
-export function scorePrediction(
-  match: Match,
-  home: number,
-  away: number,
-  winner: string
-): number {
-  if (match.status !== "completed") return 0;
-  const exact =
-    match.home_team.goals === home && match.away_team.goals === away;
-  if (exact) return 3;
-  if (match.winner && winner === match.winner) return 1;
-  return 0;
+// Correct answers (admin)
+export function getCorrectAnswers(): CorrectAnswers {
+  try { return JSON.parse(localStorage.getItem(ANS_KEY) || "{}"); } catch { return {}; }
+}
+export function getMatchCorrectAnswers(matchId: number): Record<string, string> {
+  return getCorrectAnswers()[String(matchId)] ?? {};
+}
+export function setMatchCorrectAnswers(matchId: number, answers: Record<string, string>) {
+  const all = getCorrectAnswers();
+  all[String(matchId)] = answers;
+  localStorage.setItem(ANS_KEY, JSON.stringify(all));
+  window.dispatchEvent(new Event("dummy-predictions-change"));
+}
+
+// Scoring
+export function scoreFor(matchId: number, answers: Record<string, string>): number {
+  const correct = getMatchCorrectAnswers(matchId);
+  if (!Object.keys(correct).length) return 0;
+  let score = 0;
+  for (const q of QUESTIONS) {
+    if (correct[q.id] && correct[q.id] === answers[q.id]) {
+      score += POINTS_PER_CORRECT;
+    }
+  }
+  return score;
+}
+
+export function userTotalPoints(userId: string): number {
+  return getUserPredictions(userId).reduce(
+    (s, p) => s + scoreFor(p.match_id, p.answers),
+    0
+  );
 }

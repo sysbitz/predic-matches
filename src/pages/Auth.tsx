@@ -19,20 +19,20 @@ export default function Auth() {
 
   useEffect(() => { if (user) navigate("/", { replace: true }); }, [user, navigate]);
 
-  const signIn = async () => {
-    if (!email) return toast.error("Enter any email");
+  const signIn = () => {
+    if (!email) return toast.error("ইমেইল লিখুন");
     setLoading(true);
     dummySignIn(email);
     setLoading(false);
-    toast.success("Welcome back!");
+    toast.success("স্বাগতম!");
   };
 
-  const signUp = async () => {
-    if (!email) return toast.error("Enter any email");
+  const signUp = () => {
+    if (!email) return toast.error("ইমেইল লিখুন");
     setLoading(true);
     dummySignIn(email, displayName);
     setLoading(false);
-    toast.success("Account created!");
+    toast.success("অ্যাকাউন্ট তৈরি হয়েছে!");
   };
 
   return (
@@ -41,30 +41,30 @@ export default function Auth() {
       <div className="container max-w-md py-16">
         <div className="text-center mb-8">
           <Trophy className="h-12 w-12 text-accent mx-auto mb-3" />
-          <h1 className="text-3xl font-bold">Join the prediction</h1>
-          <p className="text-muted-foreground text-sm mt-2">Sign in or create an account to predict.</p>
+          <h1 className="text-3xl font-bold">অনুমানে যোগ দিন</h1>
+          <p className="text-muted-foreground text-sm mt-2">অনুমান করতে সাইন ইন করুন বা অ্যাকাউন্ট তৈরি করুন</p>
         </div>
 
         <Tabs defaultValue="signin">
           <TabsList className="grid grid-cols-2 w-full">
-            <TabsTrigger value="signin">Sign in</TabsTrigger>
-            <TabsTrigger value="signup">Sign up</TabsTrigger>
+            <TabsTrigger value="signin">সাইন ইন</TabsTrigger>
+            <TabsTrigger value="signup">সাইন আপ</TabsTrigger>
           </TabsList>
 
           <TabsContent value="signin" className="space-y-4 mt-6">
-            <Field label="Email" value={email} onChange={setEmail} type="email" />
-            <Field label="Password" value={password} onChange={setPassword} type="password" />
+            <Field label="ইমেইল" value={email} onChange={setEmail} type="email" />
+            <Field label="পাসওয়ার্ড" value={password} onChange={setPassword} type="password" />
             <Button onClick={signIn} disabled={loading} className="w-full" size="lg">
-              {loading ? "Signing in…" : "Sign in"}
+              {loading ? "লগইন হচ্ছে…" : "সাইন ইন"}
             </Button>
           </TabsContent>
 
           <TabsContent value="signup" className="space-y-4 mt-6">
-            <Field label="Display name" value={displayName} onChange={setDisplayName} />
-            <Field label="Email" value={email} onChange={setEmail} type="email" />
-            <Field label="Password" value={password} onChange={setPassword} type="password" />
+            <Field label="নাম" value={displayName} onChange={setDisplayName} />
+            <Field label="ইমেইল" value={email} onChange={setEmail} type="email" />
+            <Field label="পাসওয়ার্ড" value={password} onChange={setPassword} type="password" />
             <Button onClick={signUp} disabled={loading} className="w-full" size="lg">
-              {loading ? "Creating account…" : "Create account"}
+              {loading ? "তৈরি হচ্ছে…" : "অ্যাকাউন্ট তৈরি করুন"}
             </Button>
           </TabsContent>
         </Tabs>
