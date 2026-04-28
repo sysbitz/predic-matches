@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Trophy, ListOrdered, LogIn, LogOut, User as UserIcon } from "lucide-react";
+import { Trophy, ListOrdered, LogIn, LogOut, User as UserIcon, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth, dummySignOut } from "@/hooks/useAuth";
 import { toast } from "sonner";
@@ -8,9 +8,9 @@ export function Header() {
   const { user } = useAuth();
   const loc = useLocation();
 
-  const handleSignOut = async () => {
+  const handleSignOut = () => {
     dummySignOut();
-    toast.success("Signed out");
+    toast.success("সাইন আউট হয়েছে");
   };
 
   const navLink = (to: string, label: string, Icon: typeof Trophy) => {
@@ -33,17 +33,18 @@ export function Header() {
       <div className="container flex items-center justify-between h-16">
         <Link to="/" className="flex items-center gap-2 font-bold text-lg">
           <Trophy className="h-6 w-6 text-accent" />
-          <span className="text-gradient-gold">FIFA Predict</span>
+          <span className="text-gradient-gold">মেগা কাপ ২০২২</span>
         </Link>
         <nav className="flex items-center gap-1">
-          {navLink("/", "Matches", Trophy)}
-          {navLink("/leaderboard", "Leaderboard", ListOrdered)}
+          {navLink("/", "ম্যাচ", Trophy)}
+          {navLink("/leaderboard", "লিডারবোর্ড", ListOrdered)}
+          {navLink("/admin", "অ্যাডমিন", Shield)}
           {user ? (
             <>
               <Link to="/profile" className="ml-2">
                 <Button variant="ghost" size="sm" className="gap-2">
                   <UserIcon className="h-4 w-4" />
-                  <span className="hidden sm:inline">Profile</span>
+                  <span className="hidden sm:inline">প্রোফাইল</span>
                 </Button>
               </Link>
               <Button variant="ghost" size="sm" onClick={handleSignOut} className="gap-2">
@@ -54,7 +55,7 @@ export function Header() {
             <Link to="/auth">
               <Button size="sm" className="gap-2 ml-2">
                 <LogIn className="h-4 w-4" />
-                Sign in
+                সাইন ইন
               </Button>
             </Link>
           )}

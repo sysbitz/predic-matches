@@ -10,13 +10,13 @@ import { Trophy } from "lucide-react";
 const PAGE_SIZE = 12;
 
 const STAGES = [
-  { id: "all", label: "All" },
-  { id: "First stage", label: "Group" },
-  { id: "Round of 16", label: "R16" },
-  { id: "Quarter-final", label: "QF" },
-  { id: "Semi-final", label: "SF" },
-  { id: "Play-off for third place", label: "3rd" },
-  { id: "Final", label: "Final" },
+  { id: "all", label: "সব" },
+  { id: "First stage", label: "গ্রুপ" },
+  { id: "Round of 16", label: "শেষ ১৬" },
+  { id: "Quarter-final", label: "কোয়ার্টার" },
+  { id: "Semi-final", label: "সেমি" },
+  { id: "Play-off for third place", label: "৩য় স্থান" },
+  { id: "Final", label: "ফাইনাল" },
 ];
 
 export default function Index() {
@@ -37,20 +37,18 @@ export default function Index() {
     <div className="min-h-screen">
       <Header />
 
-      {/* Hero */}
       <section className="container py-12 sm:py-16 text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-medium text-primary mb-4">
-          <Trophy className="h-3 w-3" /> FIFA World Cup 2022 — 64 matches
+          <Trophy className="h-3 w-3" /> মেগা কাপ ২০২২ — ৬৪টি ম্যাচ
         </div>
         <h1 className="text-4xl sm:text-6xl font-bold tracking-tight mb-4">
-          Predict every <span className="text-gradient-gold">World Cup</span> match
+          প্রতিটি <span className="text-gradient-gold">মেগা কাপ</span> ম্যাচের অনুমান করুন
         </h1>
         <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-          Pick winners and exact scores. Earn points. Climb the live leaderboard.
+          প্রতি ম্যাচে ১০টি প্রশ্নের উত্তর দিন। সঠিক উত্তরের জন্য পয়েন্ট জিতুন। লিডারবোর্ডে উঠুন।
         </p>
       </section>
 
-      {/* Stage tabs */}
       <section className="container">
         <Tabs value={stage} onValueChange={(v) => { setStage(v); setPage(1); }}>
           <TabsList className="flex flex-wrap h-auto bg-card/60 backdrop-blur">
@@ -63,10 +61,9 @@ export default function Index() {
         </Tabs>
       </section>
 
-      {/* Grid */}
       <section className="container py-8">
         {error && (
-          <div className="text-center py-12 text-destructive">Failed to load matches.</div>
+          <div className="text-center py-12 text-destructive">ম্যাচ লোড করতে ব্যর্থ</div>
         )}
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -82,7 +79,6 @@ export default function Index() {
           </div>
         )}
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <Pagination className="mt-10">
             <PaginationContent>
