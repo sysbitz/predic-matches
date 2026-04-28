@@ -1,10 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import type { Match } from "@/lib/teams";
 
 async function fetchMatches(): Promise<Match[]> {
-  const r = await fetch("https://worldcupjson.net/matches");
-  if (!r.ok) throw new Error("Failed to load matches");
-  return r.json();
+  const { data, error } = await supabase.functions.invoke("get-matches");
+  if (error) throw error;
+  if (!Array.isArray(data)) throw new Error("Invalid response");
+  return data as Match[];
 }
 
 export function useMatches() {
