@@ -1,8 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { Trophy, ListOrdered, LogIn, LogOut, User as UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
+import { useAuth, dummySignOut } from "@/hooks/useAuth";
 import { toast } from "sonner";
 
 export function Header() {
@@ -10,7 +9,7 @@ export function Header() {
   const loc = useLocation();
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
+    dummySignOut();
     toast.success("Signed out");
   };
 

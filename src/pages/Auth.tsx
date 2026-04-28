@@ -5,8 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth, dummySignIn } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Trophy } from "lucide-react";
 
@@ -21,25 +20,19 @@ export default function Auth() {
   useEffect(() => { if (user) navigate("/", { replace: true }); }, [user, navigate]);
 
   const signIn = async () => {
+    if (!email) return toast.error("Enter any email");
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    dummySignIn(email);
     setLoading(false);
-    if (error) toast.error(error.message);
-    else toast.success("Welcome back!");
+    toast.success("Welcome back!");
   };
 
   const signUp = async () => {
+    if (!email) return toast.error("Enter any email");
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email, password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/`,
-        data: { display_name: displayName || email.split("@")[0] },
-      },
-    });
+    dummySignIn(email, displayName);
     setLoading(false);
-    if (error) toast.error(error.message);
-    else toast.success("Account created! Check your email to confirm.");
+    toast.success("Account created!");
   };
 
   return (
