@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Header } from "@/components/Header";
+import { Input } from "@/components/ui/input";
 import { useMatches } from "@/hooks/useMatches";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -10,10 +11,53 @@ import { getMatchCorrectAnswers, setMatchCorrectAnswers } from "@/lib/dummyPredi
 import { toast } from "sonner";
 import { Shield } from "lucide-react";
 
+const ADMIN_PASSWORD = "megacup2026";
+const ADMIN_KEY = "admin_authed";
+
 export default function Admin() {
   const { data: matches, isLoading } = useMatches();
   const [matchId, setMatchId] = useState<number | null>(null);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [authed, setAuthed] = useState(false);
+  const [pw, setPw] = useState("");
+
+  useEffect(() => {
+    if (sessionStorage.getItem(ADMIN_KEY) === "1") setAuthed(true);
+  }, []);
+
+  const tryLogin = () => {
+    if (pw === ADMIN_PASSWORD) {
+      sessionStorage.setItem(ADMIN_KEY, "1");
+      setAuthed(true);
+    } else {
+      toast.error("ভুল পাসওয়ার্ড");
+    }
+  };
+
+  if (!authed) {
+    return (
+      <div className="min-h-screen">
+        <Header />
+        <section className="container max-w-sm py-20">
+          <div className="text-center mb-6">
+            <Shield className="h-10 w-10 text-primary mx-auto mb-2" />
+            <h1 className="text-2xl font-bold">অ্যাডমিন লগইন</h1>
+            <p className="text-sm text-muted-foreground mt-1">পাসওয়ার্ড দিয়ে প্রবেশ করুন</p>
+          </div>
+          <div className="space-y-3">
+            <Input
+              type="password"
+              placeholder="পাসওয়ার্ড"
+              value={pw}
+              onChange={(e) => setPw(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && tryLogin()}
+            />
+            <Button onClick={tryLogin} className="w-full" size="lg">প্রবেশ</Button>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   const selectMatch = (id: number) => {
     setMatchId(id);
