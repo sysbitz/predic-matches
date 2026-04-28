@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Trophy, ListOrdered, LogIn, LogOut, User as UserIcon, Shield } from "lucide-react";
+import { Trophy, ListOrdered, LogIn, LogOut, User as UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth, dummySignOut } from "@/hooks/useAuth";
 import { toast } from "sonner";
@@ -33,12 +33,11 @@ export function Header() {
       <div className="container flex items-center justify-between h-16">
         <Link to="/" className="flex items-center gap-2 font-bold text-lg">
           <Trophy className="h-6 w-6 text-accent" />
-          <span className="text-gradient-gold">মেগা কাপ ২০২২</span>
+          <span className="text-gradient-gold">MegaCup 2026</span>
         </Link>
         <nav className="flex items-center gap-1">
           {navLink("/", "ম্যাচ", Trophy)}
           {navLink("/leaderboard", "লিডারবোর্ড", ListOrdered)}
-          {navLink("/admin", "অ্যাডমিন", Shield)}
           {user ? (
             <>
               <Link to="/profile" className="ml-2">
