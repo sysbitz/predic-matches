@@ -14,13 +14,99 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      match_backgrounds: {
+        Row: {
+          away_team: string
+          created_at: string
+          home_team: string
+          image_url: string
+          match_id: number
+        }
+        Insert: {
+          away_team: string
+          created_at?: string
+          home_team: string
+          image_url: string
+          match_id: number
+        }
+        Update: {
+          away_team?: string
+          created_at?: string
+          home_team?: string
+          image_url?: string
+          match_id?: number
+        }
+        Relationships: []
+      }
+      predictions: {
+        Row: {
+          created_at: string
+          id: string
+          match_id: number
+          points_earned: number
+          predicted_away_score: number
+          predicted_home_score: number
+          predicted_winner: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          match_id: number
+          points_earned?: number
+          predicted_away_score: number
+          predicted_home_score: number
+          predicted_winner: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          match_id?: number
+          points_earned?: number
+          predicted_away_score?: number
+          predicted_home_score?: number
+          predicted_winner?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string
+          id: string
+          total_points: number
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name: string
+          id: string
+          total_points?: number
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string
+          id?: string
+          total_points?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      recompute_user_points: { Args: { _user_id: string }; Returns: undefined }
     }
     Enums: {
       [_ in never]: never
