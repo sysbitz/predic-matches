@@ -68,9 +68,8 @@ export default function Auth() {
             </ul>
 
             <div className="rounded-lg border border-border bg-muted/30 p-4 text-xs text-muted-foreground space-y-2">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span>সার্ভিস সরবরাহকারী:</span>
-                <img src={bdappsLogo} alt="bdapps" className="h-5 w-auto" loading="lazy" />
+              <div className="flex items-center justify-center">
+                <img src={bdappsLogo} alt="bdapps" className="h-10 w-auto" loading="lazy" />
               </div>
               <p>যেকোনো সময় আনসাবস্ক্রাইব করতে <span className="font-mono text-foreground">STOP</span> লিখে SMS পাঠান <span className="font-mono text-foreground">21291</span> নম্বরে।</p>
             </div>
