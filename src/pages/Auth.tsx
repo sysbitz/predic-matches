@@ -142,6 +142,11 @@ export default function Auth() {
                 <p className="text-[11px] text-muted-foreground text-center leading-relaxed">
                   সাইন ইন করার মাধ্যমে আপনি আমাদের <span className="underline">শর্তাবলী</span> ও <span className="underline">গোপনীয়তা নীতিতে</span> সম্মত হচ্ছেন।
                 </p>
+
+                <div className="flex items-center justify-center gap-2 pt-2 border-t border-border">
+                  <span className="text-[11px] text-muted-foreground">Powered by</span>
+                  <img src={bdappsLogo} alt="bdapps" className="h-6 w-auto" loading="lazy" />
+                </div>
               </CardContent>
             </Card>
           </div>
