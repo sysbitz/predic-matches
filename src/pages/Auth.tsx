@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useAuth, dummySignIn } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Trophy, Target, ListOrdered, Gift, Bell, CheckCircle2, Smartphone } from "lucide-react";
+import bdappsLogo from "@/assets/bdapps-logo.png";
 
 const FEATURES = [
   { icon: Target, text: "প্রতি ম্যাচে ১০টি প্রশ্নের অনুমান করুন" },
@@ -66,9 +67,12 @@ export default function Auth() {
               ))}
             </ul>
 
-            <div className="rounded-lg border border-border bg-muted/30 p-4 text-xs text-muted-foreground space-y-1">
-              <p>📱 এই সার্ভিসটি <span className="font-semibold text-foreground">bdapps</span>-এর মাধ্যমে সকল রবি ও এয়ারটেল গ্রাহকদের জন্য উপলব্ধ।</p>
-              <p>যেকোনো সময় আনসাবস্ক্রাইব করতে SMS করুন <span className="font-mono text-foreground">STOP</span> পাঠান <span className="font-mono text-foreground">21291</span> নম্বরে।</p>
+            <div className="rounded-lg border border-border bg-muted/30 p-4 text-xs text-muted-foreground space-y-2">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span>সার্ভিস সরবরাহকারী:</span>
+                <img src={bdappsLogo} alt="bdapps" className="h-5 w-auto" loading="lazy" />
+              </div>
+              <p>যেকোনো সময় আনসাবস্ক্রাইব করতে <span className="font-mono text-foreground">STOP</span> লিখে SMS পাঠান <span className="font-mono text-foreground">21291</span> নম্বরে।</p>
             </div>
           </div>
 
@@ -138,6 +142,11 @@ export default function Auth() {
                 <p className="text-[11px] text-muted-foreground text-center leading-relaxed">
                   সাইন ইন করার মাধ্যমে আপনি আমাদের <span className="underline">শর্তাবলী</span> ও <span className="underline">গোপনীয়তা নীতিতে</span> সম্মত হচ্ছেন।
                 </p>
+
+                <div className="flex items-center justify-center gap-2 pt-2 border-t border-border">
+                  <span className="text-[11px] text-muted-foreground">Powered by</span>
+                  <img src={bdappsLogo} alt="bdapps" className="h-6 w-auto" loading="lazy" />
+                </div>
               </CardContent>
             </Card>
           </div>
