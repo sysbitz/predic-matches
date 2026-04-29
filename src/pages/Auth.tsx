@@ -67,9 +67,12 @@ export default function Auth() {
               ))}
             </ul>
 
-            <div className="rounded-lg border border-border bg-muted/30 p-4 text-xs text-muted-foreground space-y-1">
-              <p>📱 এই সার্ভিসটি <span className="font-semibold text-foreground">bdapps</span>-এর মাধ্যমে সকল রবি ও এয়ারটেল গ্রাহকদের জন্য উপলব্ধ।</p>
-              <p>যেকোনো সময় আনসাবস্ক্রাইব করতে SMS করুন <span className="font-mono text-foreground">STOP</span> পাঠান <span className="font-mono text-foreground">21291</span> নম্বরে।</p>
+            <div className="rounded-lg border border-border bg-muted/30 p-4 text-xs text-muted-foreground space-y-2">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span>সার্ভিস সরবরাহকারী:</span>
+                <img src={bdappsLogo} alt="bdapps" className="h-5 w-auto" loading="lazy" />
+              </div>
+              <p>যেকোনো সময় আনসাবস্ক্রাইব করতে <span className="font-mono text-foreground">STOP</span> লিখে SMS পাঠান <span className="font-mono text-foreground">21291</span> নম্বরে।</p>
             </div>
           </div>
 
