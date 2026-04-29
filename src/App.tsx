@@ -9,6 +9,13 @@ import Auth from "./pages/Auth.tsx";
 import Leaderboard from "./pages/Leaderboard.tsx";
 import Profile from "./pages/Profile.tsx";
 import Admin from "./pages/Admin.tsx";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+
+function RootRoute() {
+  const { user } = useAuth();
+  return user ? <Index /> : <Navigate to="/auth" replace />;
+}
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false, retry: 1 } },
