@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useAuth, dummySignIn } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Trophy, Target, ListOrdered, Gift, Bell, CheckCircle2, Smartphone } from "lucide-react";
+import bdappsLogo from "@/assets/bdapps-logo.png";
 
 const FEATURES = [
   { icon: Target, text: "প্রতি ম্যাচে ১০টি প্রশ্নের অনুমান করুন" },
